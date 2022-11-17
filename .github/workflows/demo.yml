@@ -19,7 +19,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      script-file:  ${{ steps.publish.outputs.fileName}}
+      script-file: ${{ steps.publish.outputs.fileName }} # second node mathes id element below
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -27,8 +27,9 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
-      - name: Publish SJ Filename
-        run: find dist/assets/*.js -type f -execdir echo 'fileName={}' >> $GITHUB_OUTPUT ';' # note fileName mathes last of script-file:
+      - name: Publish JS Filename
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo 'fileName={}' >> $GITHUB_OUTPUT ';' # note fileName matches last of script-file:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
